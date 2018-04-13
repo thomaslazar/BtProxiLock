@@ -3,13 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Topshelf;
 
 namespace BtProxiLockService
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            var rc = HostFactory.Run(x =>
+            {
+                x.Service<BtProxiLockService>(s =>
+                {
+                    s.ConstructUsing(name => new BtProxiLockService());
+                    s.WhenStarted(btpls => btpls.Start());
+                    s.WhenStopped(btpls => btpls.Stop());
+                });
+                x.RunAsLocalService();
+
+                x.SetDescription("Bluetooth Proximity Lock Service");
+                x.SetDisplayName("BtProxiLockService");
+                x.SetServiceName("BtProxiLockService");
+            });
+
+            var exitCode = (int)Convert.ChangeType(rc, rc.GetTypeCode());
+            Environment.ExitCode = exitCode;
         }
     }
 }
