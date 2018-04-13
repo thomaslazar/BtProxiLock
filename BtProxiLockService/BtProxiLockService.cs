@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Akka.Actor;
+﻿using Akka.Actor;
 using Akka.Configuration;
 
 namespace BtProxiLockService
@@ -11,8 +6,9 @@ namespace BtProxiLockService
     public class BtProxiLockService
     {
         private ActorSystem _actorSystem = null;
+
         private readonly Config _config = ConfigurationFactory.ParseString(@"
-            akka {  
+            akka {
                 actor {
                     provider = remote
                 }
@@ -22,12 +18,11 @@ namespace BtProxiLockService
                         hostname = localhost
                     }
                 }
-            }        
+            }
         ");
 
         public BtProxiLockService()
         {
-
         }
 
         public void Start()
