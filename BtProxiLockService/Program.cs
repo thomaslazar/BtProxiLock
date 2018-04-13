@@ -24,6 +24,8 @@ namespace BtProxiLockService
                 x.SetDescription("Bluetooth Proximity Lock Service");
                 x.SetDisplayName("BtProxiLockService");
                 x.SetServiceName("BtProxiLockService");
+
+                x.UseNLog();
             });
 
             var exitCode = (int)Convert.ChangeType(rc, rc.GetTypeCode());
