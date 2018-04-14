@@ -1,4 +1,5 @@
 ﻿using Akka.Actor;
+using BtProxiLockActors.Messages;
 
 namespace BtProxiLockActors.Actors
 {
@@ -6,6 +7,11 @@ namespace BtProxiLockActors.Actors
     {
         public CommunicationActor()
         {
+            Receive<ShutdownMsg>(msg =>
+            {
+                Sender.Tell(new ReceivedMsg());
+                Context.System.Terminate();
+            });
         }
     }
 }

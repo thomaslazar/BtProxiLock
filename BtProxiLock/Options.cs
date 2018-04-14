@@ -4,12 +4,10 @@ namespace BtProxiLock
 {
     internal class Options
     {
-        public Options(bool daemon)
-        {
-            this.Daemon = daemon;
-        }
+        [Option('d', Required = false)]
+        public bool StartupDaemon { get; set; }
 
-        [Option('d')]
-        public bool Daemon { get; }
+        [Option('t', Required = false)]
+        public bool ShutdownDeamon { get; set; }
     }
 }

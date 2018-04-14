@@ -3,13 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BtProxiLockServiceActors.Actors
+namespace BtProxiLockActors.Actors
 {
     public class ConfigurationActor : ReceiveActor
     {
         public ConfigurationActor()
         {
-
         }
     }
 }
