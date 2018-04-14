@@ -3,6 +3,9 @@ using Akka.Configuration;
 
 namespace BtProxiLockService
 {
+    /// <summary>
+    /// Custom TopShelf service class
+    /// </summary>
     public class BtProxiLockService
     {
         private ActorSystem _actorSystem = null;
@@ -21,15 +24,17 @@ namespace BtProxiLockService
             }
         ");
 
-        public BtProxiLockService()
-        {
-        }
-
+        /// <summary>
+        /// Starts up the ActorSystem and initializing global actors.
+        /// </summary>
         public void Start()
         {
             _actorSystem = ActorSystem.Create("BtProxiLockActorSystem", _config);
         }
 
+        /// <summary>
+        /// Shuts down the ActorSystem
+        /// </summary>
         public void Stop()
         {
             _actorSystem.Terminate();
