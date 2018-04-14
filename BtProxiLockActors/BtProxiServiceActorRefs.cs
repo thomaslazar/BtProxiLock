@@ -3,19 +3,16 @@
 namespace BtProxiLockService
 {
     /// <summary>
-    /// Class to make globally accessible actors available 
+    /// Class to make globally accessible actors available
     /// </summary>
-    public class BtProxiServiceActorRefs
+    public static class BtProxiServiceActorRefs
     {
-        private readonly ActorSystem _actorSystem;
+        public static ActorSystem System;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BtProxiServiceActorRefs"/> class.
-        /// </summary>
-        /// <param name="actorSystem">The actor system.</param>
-        public BtProxiServiceActorRefs(ActorSystem actorSystem)
-        {
-            _actorSystem = actorSystem;
-        }
+        public static IActorRef CommunicationActor;
+
+        public static IActorRef ConfigurationActor;
+
+        public static IActorRef LockingActor;
     }
 }
