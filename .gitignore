@@ -287,3 +287,5 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 /BtProxiLockService/BtProxiLockService.xml
+/BtProxiLockActors/BtProxiLockActors.xml
+/BtProxiLock/BtProxiLock.xml

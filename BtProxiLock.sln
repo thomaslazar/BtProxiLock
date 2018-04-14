@@ -9,6 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BtProxiLockActors", "BtProx
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtProxiLock", "BtProxiLock\BtProxiLock.csproj", "{447CD307-58CB-4B4E-B918-734F5788E499}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A9F88C4D-D119-40AB-BA22-EA48872BA266}"
+	ProjectSection(SolutionItems) = preProject
+		BtProxiLock.ruleset = BtProxiLock.ruleset
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
