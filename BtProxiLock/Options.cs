@@ -4,10 +4,18 @@ namespace BtProxiLock
 {
     internal class Options
     {
-        [Option('d', Required = false)]
+        // Options affecting server
+        [Option('d')]
         public bool StartupDaemon { get; set; }
 
-        [Option('t', Required = false)]
-        public bool ShutdownDeamon { get; set; }
+        [Option('a')]
+        public string BluetoothAddress { get; set; }
+
+        [Option('i')]
+        public int Intervall { get; set; }
+
+        // Options affecting client
+        [Option('t')]
+        public bool ShutdownDaemon { get; set; }
     }
 }
