@@ -11,8 +11,6 @@ namespace BtProxiLockActors
 
         public static IActorRef CommunicationActor;
 
-        public static IActorRef ConfigurationActor;
-
         public static IActorRef LockingActor;
     }
 }
