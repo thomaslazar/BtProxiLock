@@ -40,7 +40,6 @@ namespace BtProxiLock
             var system = BtProxiLockServerActorRefs.System = ActorSystem.Create("BtProxiLockServerActorSystem", _configServer);
             var lockingActor = BtProxiLockServerActorRefs.LockingActor = system.ActorOf<LockingActor>("LockingActor");
             BtProxiLockServerActorRefs.CommunicationActor = system.ActorOf(Props.Create(() => new CommunicationActor(lockingActor)), "CommunicationActor");
-            BtProxiLockServerActorRefs.ConfigurationActor = system.ActorOf<ConfigurationActor>("ConfigurationActor");
         }
 
         public static void StartClientActorSystem()
