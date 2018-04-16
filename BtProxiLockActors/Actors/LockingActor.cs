@@ -78,8 +78,9 @@ namespace BtProxiLockActors.Actors
                 }
 
                 var now = DateTime.Now;
+                var lastInputTime = GetLastInputTimeInMilliseconds();
 
-                if (now > lastCheck + TimeSpan.FromMilliseconds(interval))
+                if (now > lastCheck + TimeSpan.FromMilliseconds(interval) && lastInputTime >= interval * 2)
                 {
                     lastCheck = now;
                     var inRange = IsBluetoothDeviceInRange(bluetoothAddress);
@@ -125,6 +126,40 @@ namespace BtProxiLockActors.Actors
             }
 
             return inRange;
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+
+        private static uint GetLastInputTimeInMilliseconds()
+        {
+            uint idleTime = 0;
+            LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();
+            lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
+            lastInputInfo.dwTime = 0;
+
+            uint envTicks = (uint)Environment.TickCount;
+
+            if (GetLastInputInfo(ref lastInputInfo))
+            {
+                uint lastInputTick = lastInputInfo.dwTime;
+
+                idleTime = envTicks - lastInputTick;
+            }
+
+            return idleTime;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        private struct LASTINPUTINFO
+        {
+            public static readonly int SizeOf = Marshal.SizeOf(typeof(LASTINPUTINFO));
+
+            [MarshalAs(UnmanagedType.U4)]
+            public UInt32 cbSize;
+
+            [MarshalAs(UnmanagedType.U4)]
+            public UInt32 dwTime;
         }
     }
 }
