@@ -7,6 +7,7 @@
     using BtProxiLockActors;
     using BtProxiLockActors.Messages;
     using CommandLine;
+    using Microsoft.Win32;
     using static BtProxiLockShared.Global;
 
     /// <summary>
@@ -49,11 +50,45 @@
                 }
             }
 
+            var serverPath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var serverExe = Path.Combine(serverPath, "BtProxiLockSrv.exe");
+
+            var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+
+            if (options.AddAutostart)
+            {
+                if (options.BluetoothAddress == null)
+                {
+                    Console.WriteLine("You need to set the device Bluetooth address to be able to install the server into autostart.");
+                    return;
+                }
+
+                var autostartExe = $"\"{serverExe}\" -i {options.Interval} -a {options.BluetoothAddress}";
+                rkApp.SetValue("BtProxiLockSrv", autostartExe);
+                Console.WriteLine($"{autostartExe} was added to autostart.");
+
+                if (!options.StartBackground)
+                {
+                    return;
+                }
+            }
+
+            if (options.RemoveAutostart)
+            {
+                var autostartExe = rkApp.GetValue("BtProxiLockSrv");
+                if (autostartExe == null)
+                {
+                    Console.WriteLine("BtProxiLockSrv autostart wasn't enabled.");
+                    return;
+                }
+
+                rkApp.DeleteValue("BtProxiLockSrv");
+                Console.WriteLine($"Removed {autostartExe} from autostart.");
+                return;
+            }
+
             if (options.StartBackground)
             {
-                var serverPath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-                var serverExe = Path.Combine(serverPath, "BtProxiLockSrv.exe");
-
                 var pi = new ProcessStartInfo
                 {
                     FileName = serverExe,

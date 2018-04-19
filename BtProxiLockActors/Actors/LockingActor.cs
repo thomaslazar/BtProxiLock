@@ -85,14 +85,14 @@
                 var now = DateTime.Now;
                 var lastInputTime = GetLastInputTimeInMilliseconds();
 
-                if (now > lastCheck + TimeSpan.FromMilliseconds(interval) && lastInputTime >= interval * 2)
+                if ((now > lastCheck + TimeSpan.FromMilliseconds(interval) && lastInputTime >= interval * 2) || !firstTry)
                 {
                     var inRange = IsBluetoothDeviceInRange(bluetoothAddress);
 
                     if (!inRange && firstTry)
                     {
                         // sometimes we get a false positive here, so we check again.
-                        Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(2), Self, new LockMsg(), ActorRefs.NoSender);
+                        Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(5), Self, new LockMsg(), ActorRefs.NoSender);
                         firstTry = false;
                         return;
                     }
