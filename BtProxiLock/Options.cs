@@ -4,7 +4,7 @@ namespace BtProxiLock
 {
     internal class Options
     {
-        [Option('d', HelpText = "List nearby devices. Hint: Device needs to be in pairing mode.")]
+        [Option('l', HelpText = "List nearby devices. Hint: Device needs to be in pairing mode.")]
         public bool DeviceDetection { get; set; }
 
         [Option('b', HelpText = "Start background server.")]

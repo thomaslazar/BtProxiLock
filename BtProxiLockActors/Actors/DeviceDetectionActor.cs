@@ -20,12 +20,14 @@ namespace BtProxiLockActors.Actors
         {
             var btClient = new BluetoothClient();
 
-            Console.WriteLine("Detecting devices...");
+            Console.Write("Detecting devices...");
             var devices = btClient.DiscoverDevices();
+            Console.WriteLine();
 
             if (devices.Length == 0)
             {
                 Console.WriteLine("No devices found.");
+                return null;
             }
 
             Console.WriteLine("Bluetooth devices");

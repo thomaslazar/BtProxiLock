@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Threading;
 using Akka.Actor;
 using BtProxiLockActors.Messages;
 using InTheHand.Net;
@@ -15,6 +16,7 @@ namespace BtProxiLockActors.Actors
         private bool workstationLocked = false;
         private bool doLock = false;
         private DateTime lastCheck = DateTime.Now;
+        private bool firstTry = true;
 
         private ICancelable cancelToken;
 
@@ -82,8 +84,19 @@ namespace BtProxiLockActors.Actors
 
                 if (now > lastCheck + TimeSpan.FromMilliseconds(interval) && lastInputTime >= interval * 2)
                 {
-                    lastCheck = now;
                     var inRange = IsBluetoothDeviceInRange(bluetoothAddress);
+
+                    if (!inRange && firstTry)
+                    {
+                        // sometimes we get a false positive here, so we check again.
+                        //inRange = IsBluetoothDeviceInRange(bluetoothAddress);
+                        Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(2), Self, new LockMsg(), ActorRefs.NoSender);
+                        firstTry = false;
+                        return;
+                    }
+
+                    firstTry = true;
+                    lastCheck = now;
 
                     if (inRange && !doLock)
                     {
