@@ -9,6 +9,9 @@
     using CommandLine;
     using static BtProxiLockShared.Global;
 
+    /// <summary>
+    /// Command line application for the BtProxiLock Client
+    /// </summary>
     internal class Program
     {
         private static void Main(string[] args)

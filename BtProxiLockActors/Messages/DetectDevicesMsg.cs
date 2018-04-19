@@ -1,4 +1,9 @@
 ﻿namespace BtProxiLockActors.Messages
 {
-    public class DetectDevicesMsg { }
+    /// <summary>
+    /// Immutable detect device message class
+    /// </summary>
+    public class DetectDevicesMsg
+    {
+    }
 }

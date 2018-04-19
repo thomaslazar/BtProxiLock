@@ -8,6 +8,10 @@
     using InTheHand.Net;
     using InTheHand.Net.Sockets;
 
+    /// <summary>
+    /// Locking actor used to check if configured Bluetooth device is in range and if it isn't locks the workstation
+    /// </summary>
+    /// <seealso cref="Akka.Actor.ReceiveActor" />
     public class LockingActor : ReceiveActor
     {
         private string bluetoothAddress = null;
@@ -19,16 +23,16 @@
 
         private ICancelable cancelToken;
 
-        [DllImport("user32.dll")]
-        private static extern bool LockWorkStation();
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LockingActor"/> class.
+        /// </summary>
         public LockingActor()
         {
             Receive<ConfigureMsg>(msg =>
             {
-                if (msg.Address != null)
+                if (msg.BluetoothAddress != null)
                 {
-                    bluetoothAddress = msg.Address;
+                    bluetoothAddress = msg.BluetoothAddress;
                 }
 
                 if (msg.Interval > 0)
@@ -88,7 +92,6 @@
                     if (!inRange && firstTry)
                     {
                         // sometimes we get a false positive here, so we check again.
-                        //inRange = IsBluetoothDeviceInRange(bluetoothAddress);
                         Context.System.Scheduler.ScheduleTellOnce(TimeSpan.FromSeconds(2), Self, new LockMsg(), ActorRefs.NoSender);
                         firstTry = false;
                         return;
@@ -113,6 +116,31 @@
                     }
                 }
             });
+        }
+
+        [DllImport("user32.dll")]
+        private static extern bool LockWorkStation();
+
+        [DllImport("user32.dll")]
+        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
+
+        private static uint GetLastInputTimeInMilliseconds()
+        {
+            uint idleTime = 0;
+            LASTINPUTINFO lastInputInfo = default(LASTINPUTINFO);
+            lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
+            lastInputInfo.dwTime = 0;
+
+            uint envTicks = (uint)Environment.TickCount;
+
+            if (GetLastInputInfo(ref lastInputInfo))
+            {
+                uint lastInputTick = lastInputInfo.dwTime;
+
+                idleTime = envTicks - lastInputTick;
+            }
+
+            return idleTime;
         }
 
         private bool IsBluetoothDeviceInRange(string address)
@@ -140,38 +168,22 @@
             return inRange;
         }
 
-        [DllImport("user32.dll")]
-        private static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
-
-        private static uint GetLastInputTimeInMilliseconds()
-        {
-            uint idleTime = 0;
-            LASTINPUTINFO lastInputInfo = new LASTINPUTINFO();
-            lastInputInfo.cbSize = (uint)Marshal.SizeOf(lastInputInfo);
-            lastInputInfo.dwTime = 0;
-
-            uint envTicks = (uint)Environment.TickCount;
-
-            if (GetLastInputInfo(ref lastInputInfo))
-            {
-                uint lastInputTick = lastInputInfo.dwTime;
-
-                idleTime = envTicks - lastInputTick;
-            }
-
-            return idleTime;
-        }
-
         [StructLayout(LayoutKind.Sequential)]
         private struct LASTINPUTINFO
         {
             public static readonly int SizeOf = Marshal.SizeOf(typeof(LASTINPUTINFO));
+
+#pragma warning disable SA1307 // Accessible fields must begin with upper-case letter
+#pragma warning disable SA1121 // Use built-in type alias
 
             [MarshalAs(UnmanagedType.U4)]
             public UInt32 cbSize;
 
             [MarshalAs(UnmanagedType.U4)]
             public UInt32 dwTime;
+
+#pragma warning restore SA1307 // Accessible fields must begin with upper-case letter
+#pragma warning restore SA1121 // Use built-in type alias
         }
     }
 }

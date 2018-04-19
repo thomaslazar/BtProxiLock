@@ -1,4 +1,9 @@
 ﻿namespace BtProxiLockActors.Messages
 {
-    public class ReceivedMsg { }
+    /// <summary>
+    /// Immutable received message class
+    /// </summary>
+    public class ReceivedMsg
+    {
+    }
 }

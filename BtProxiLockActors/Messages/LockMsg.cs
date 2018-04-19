@@ -1,4 +1,9 @@
 ﻿namespace BtProxiLockActors.Messages
 {
-    public class LockMsg { }
+    /// <summary>
+    /// Immutable lock message class
+    /// </summary>
+    public class LockMsg
+    {
+    }
 }

@@ -5,8 +5,15 @@
     using BtProxiLockActors.Messages;
     using InTheHand.Net.Sockets;
 
+    /// <summary>
+    /// Device detection actor used to detect Bluetooth devices in pairing mode
+    /// </summary>
+    /// <seealso cref="Akka.Actor.ReceiveActor" />
     public class DeviceDetectionActor : ReceiveActor
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeviceDetectionActor"/> class.
+        /// </summary>
         public DeviceDetectionActor()
         {
             Receive<DetectDevicesMsg>(_ =>
@@ -34,14 +41,9 @@
             foreach (var device in devices)
             {
                 var blueToothInfo =
-                    string.Format(
-                        "- DeviceName: {0}{1}  Address: {2}{1}  Last seen: {3}{1}  Last used: {4}{1}",
-                        device.DeviceName, Environment.NewLine, device.DeviceAddress, device.LastSeen,
-                        device.LastUsed);
+                    $"- DeviceName: {device.DeviceName}\n Address: {device.DeviceAddress}\n Last seen: {device.LastSeen}\n Last used: {device.LastUsed}\n";
 
-                blueToothInfo += string.Format("  Class of device{0}   Device: {1}{0}   Major Device: {2}{0}   Service: {3}",
-                    Environment.NewLine, device.ClassOfDevice.Device, device.ClassOfDevice.MajorDevice,
-                    device.ClassOfDevice.Service);
+                blueToothInfo += $"  Class of device\n   Device: {device.ClassOfDevice.Device}\n   Major Device: {device.ClassOfDevice.MajorDevice}\n   Service: {device.ClassOfDevice.Service}";
                 Console.WriteLine(blueToothInfo);
                 Console.WriteLine();
             }

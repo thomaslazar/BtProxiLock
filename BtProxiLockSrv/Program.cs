@@ -8,6 +8,9 @@
     using Microsoft.Win32;
     using static BtProxiLockShared.Global;
 
+    /// <summary>
+    /// Command line application for the BtProxiLock Server
+    /// </summary>
     internal class Program
     {
         private static void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)

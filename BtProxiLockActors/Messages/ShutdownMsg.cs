@@ -1,4 +1,9 @@
 ﻿namespace BtProxiLockActors.Messages
 {
-    public class ShutdownMsg { }
+    /// <summary>
+    /// Immutable shutdown message class
+    /// </summary>
+    public class ShutdownMsg
+    {
+    }
 }
