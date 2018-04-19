@@ -1,8 +1,8 @@
-﻿using Akka.Actor;
-using BtProxiLockActors.Messages;
-
-namespace BtProxiLockActors.Actors
+﻿namespace BtProxiLockActors.Actors
 {
+    using Akka.Actor;
+    using BtProxiLockActors.Messages;
+
     public class CommunicationActor : ReceiveActor
     {
         private readonly IActorRef lockingActor;

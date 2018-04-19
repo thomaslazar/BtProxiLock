@@ -1,63 +1,31 @@
-﻿using System;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using WindowsInput;
-using WindowsInput.Native;
-using Akka.Actor;
-using Akka.Configuration;
-using BtProxiLockActors;
-using BtProxiLockActors.Actors;
-using BtProxiLockActors.Messages;
-using CommandLine;
-using Microsoft.Win32;
-
-namespace BtProxiLock
+﻿namespace BtProxiLock
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using Akka.Actor;
+    using BtProxiLockActors;
+    using BtProxiLockActors.Messages;
+    using CommandLine;
+    using static BtProxiLockShared.Global;
+
     internal class Program
     {
-        private static InputSimulator input = new InputSimulator();
-
-        private static string uniqueAppÍd = "BtProxiLock";
-
-        [DllImport("kernel32.dll", SetLastError = true, ExactSpelling = true)]
-        private static extern bool AttachConsole(int input);
-
-        private static void AttachConsole()
-        {
-            AttachConsole(-1);
-            Console.WriteLine();
-        }
-
-        private static void SystemEvents_SessionSwitch(object sender, SessionSwitchEventArgs e)
-        {
-            if (e.Reason == SessionSwitchReason.SessionLock)
-            {
-            }
-            else if (e.Reason == SessionSwitchReason.SessionUnlock)
-            {
-                BtProxiLockServerActorRefs.LockingActor.Tell(new WorkstationUnlockedMsg());
-            }
-        }
-
         private static void Main(string[] args)
         {
             if (args.Length == 0)
             {
-                AttachConsole();
                 args = new string[] { "--help" };
             }
 
             var result = Parser.Default.ParseArguments<Options>(args)
                 .WithParsed(options => RunAndReturnExitCode(options));
-
-            input.Keyboard.KeyPress(VirtualKeyCode.RETURN);
         }
 
         private static void RunAndReturnExitCode(Options options)
         {
-            if (options.Intervall < 1000)
+            if (options.Interval < 1000)
             {
-                AttachConsole();
                 Console.WriteLine("Interval needs to be >= 1000.");
                 return;
             }
@@ -66,7 +34,6 @@ namespace BtProxiLock
             {
                 var result = CheckServerRunning();
 
-                AttachConsole();
                 if (result)
                 {
                     Console.WriteLine("Server currently running.");
@@ -81,33 +48,28 @@ namespace BtProxiLock
 
             if (options.StartBackground)
             {
-                SystemEvents.SessionSwitch += new SessionSwitchEventHandler(SystemEvents_SessionSwitch);
+                var serverPath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+                var serverExe = Path.Combine(serverPath, "BtProxiLockSrv.exe");
 
-                // Check if server already running
-                bool result;
-                var mutex = new System.Threading.Mutex(true, uniqueAppÍd, out result);
-
-                if (!result)
+                var pi = new ProcessStartInfo
                 {
-                    return;
+                    FileName = serverExe,
+                    WorkingDirectory = serverPath,
+                    CreateNoWindow = true,
+                    UseShellExecute = false
+                };
+
+                var args = $"-i {options.Interval}";
+                if (options.BluetoothAddress != null)
+                {
+                    args += $" -a {options.BluetoothAddress}";
                 }
 
-                // Starting server
-                Startup.StartServerActorSystem();
+                pi.Arguments = args;
+                Process.Start(pi);
 
-                if (options.BluetoothAddress != null || options.Intervall > 0)
-                {
-                    BtProxiLockServerActorRefs.LockingActor.Tell(CreateConfigureMsgFromOptions(options));
-                }
-
-                GC.KeepAlive(mutex);
-
-                var task = BtProxiLockServerActorRefs.System.WhenTerminated;
-                task.Wait();
                 return;
             }
-
-            AttachConsole();
 
             Startup.StartClientActorSystem();
             var clientSystem = BtProxiLockClientActorRefs.System;
@@ -124,9 +86,7 @@ namespace BtProxiLock
                 return;
             }
 
-            //var commActor = clientSystem.ActorSelection("akka.tcp://BtProxiLockServerActorSystem@localhost:9001/user/CommunicationActor");
-
-            if (options.BluetoothAddress != null || options.Intervall > 0)
+            if (options.BluetoothAddress != null || options.Interval > 0)
             {
                 BtProxiLockClientActorRefs.CommunicationActor.Tell(CreateConfigureMsgFromOptions(options));
             }
@@ -144,13 +104,13 @@ namespace BtProxiLock
 
         private static ConfigureMsg CreateConfigureMsgFromOptions(Options options)
         {
-            return new ConfigureMsg(options.BluetoothAddress ?? null, options.Intervall);
+            return new ConfigureMsg(options.BluetoothAddress ?? null, options.Interval);
         }
 
         private static bool CheckServerRunning()
         {
             bool result;
-            var mutex = new System.Threading.Mutex(true, uniqueAppÍd, out result);
+            var mutex = new System.Threading.Mutex(true, UniqueAppId, out result);
 
             return !result;
         }

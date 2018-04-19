@@ -1,7 +1,7 @@
-﻿using Akka.Actor;
-
-namespace BtProxiLockActors
+﻿namespace BtProxiLockActors
 {
+    using Akka.Actor;
+
     /// <summary>
     /// Class to make globally accessible actors available
     /// </summary>

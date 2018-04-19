@@ -1,14 +1,13 @@
-﻿using System;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Akka.Actor;
-using BtProxiLockActors.Messages;
-using InTheHand.Net;
-using InTheHand.Net.Sockets;
-
-namespace BtProxiLockActors.Actors
+﻿namespace BtProxiLockActors.Actors
 {
+    using System;
+    using System.Net.Sockets;
+    using System.Runtime.InteropServices;
+    using Akka.Actor;
+    using BtProxiLockActors.Messages;
+    using InTheHand.Net;
+    using InTheHand.Net.Sockets;
+
     public class LockingActor : ReceiveActor
     {
         private string bluetoothAddress = null;

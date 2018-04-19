@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		BtProxiLock.ruleset = BtProxiLock.ruleset
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtProxiLockSrv", "BtProxiLockSrv\BtProxiLockSrv.csproj", "{96A9DFC4-127D-4247-8201-EA811A2377AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BtProxiLockShared", "BtProxiLockShared\BtProxiLockShared.csproj", "{BA9F31A4-F36A-40CA-9028-FFE994686F80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +30,14 @@ Global
 		{447CD307-58CB-4B4E-B918-734F5788E499}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{447CD307-58CB-4B4E-B918-734F5788E499}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{447CD307-58CB-4B4E-B918-734F5788E499}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96A9DFC4-127D-4247-8201-EA811A2377AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96A9DFC4-127D-4247-8201-EA811A2377AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96A9DFC4-127D-4247-8201-EA811A2377AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96A9DFC4-127D-4247-8201-EA811A2377AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA9F31A4-F36A-40CA-9028-FFE994686F80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA9F31A4-F36A-40CA-9028-FFE994686F80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA9F31A4-F36A-40CA-9028-FFE994686F80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA9F31A4-F36A-40CA-9028-FFE994686F80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

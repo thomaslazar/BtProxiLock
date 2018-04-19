@@ -1,7 +1,7 @@
-﻿using CommandLine;
-
-namespace BtProxiLock
+﻿namespace BtProxiLock
 {
+    using CommandLine;
+
     internal class Options
     {
         [Option('l', HelpText = "List nearby devices. Hint: Device needs to be in pairing mode.")]
@@ -17,7 +17,7 @@ namespace BtProxiLock
         public string BluetoothAddress { get; set; }
 
         [Option('i', HelpText = "Monitoring interval in milliseconds. >= 1000", Default = 10000)]
-        public int Intervall { get; set; }
+        public int Interval { get; set; }
 
         [Option('s', HelpText = "Check current status.")]
         public bool Status { get; set; }

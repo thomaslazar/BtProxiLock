@@ -1,10 +1,10 @@
-﻿using System;
-using Akka.Actor;
-using BtProxiLockActors.Messages;
-using InTheHand.Net.Sockets;
-
-namespace BtProxiLockActors.Actors
+﻿namespace BtProxiLockActors.Actors
 {
+    using System;
+    using Akka.Actor;
+    using BtProxiLockActors.Messages;
+    using InTheHand.Net.Sockets;
+
     public class DeviceDetectionActor : ReceiveActor
     {
         public DeviceDetectionActor()
