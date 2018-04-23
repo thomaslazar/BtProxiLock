@@ -50,8 +50,9 @@
                 }
             }
 
-            var serverPath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
-            var serverExe = Path.Combine(serverPath, "BtProxiLockSrv.exe");
+            var exePath = Path.GetDirectoryName(new Uri(System.Reflection.Assembly.GetExecutingAssembly().CodeBase).LocalPath);
+            var clientExe = Path.Combine(exePath, "BtProxiLock.exe");
+            var serverExe = Path.Combine(exePath, "BtProxiLockSrv.exe");
 
             var rkApp = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
 
@@ -63,7 +64,7 @@
                     return;
                 }
 
-                var autostartExe = $"\"{serverExe}\" -i {options.Interval} -a {options.BluetoothAddress}";
+                var autostartExe = $"\"{clientExe}\" -b -i {options.Interval} -a {options.BluetoothAddress}";
                 rkApp.SetValue("BtProxiLockSrv", autostartExe);
                 Console.WriteLine($"{autostartExe} was added to autostart.");
 
@@ -92,7 +93,7 @@
                 var pi = new ProcessStartInfo
                 {
                     FileName = serverExe,
-                    WorkingDirectory = serverPath,
+                    WorkingDirectory = exePath,
                     CreateNoWindow = true,
                     UseShellExecute = false
                 };
